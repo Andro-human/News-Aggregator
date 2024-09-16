@@ -36,7 +36,7 @@ const Articles = () => {
       }}
     >
       {articles.map((item, index) => (
-        <CardComponent key={index} data={item} />
+        <CardComponent key={index} data={item} fetchData={fetchData} />
       ))}
     </Box>
   );

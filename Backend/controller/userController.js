@@ -101,4 +101,46 @@ const registerController = async (req, res) => {
   }
 };
 
-export { loginController, registerController };
+const getUserController = async (req, res) => {
+  try {
+    const user = await userModel.findById({ _id: req.userId });
+    return res.status(200).json({
+      success: true,
+      message: "User fectched Successfully",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Error in getUser API",
+      error,
+    });
+  }
+};
+
+const logoutController = async (req, res) => {
+  try {
+    res.cookie("Login-token", "none", {
+      // setting the cookie to none and expires to 0
+      expires: new Date(0),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Error in Logout API",
+      error,
+    });
+  }
+};
+
+export { loginController, registerController, getUserController, logoutController };

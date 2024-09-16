@@ -3,26 +3,46 @@ import { Box, Card, Typography } from "@mui/material";
 import Like from "../assets/Like.jsx";
 import Dislike from "../assets/Dislike.jsx";
 import moment from "moment";
+import axios from "axios";
+import { useUser } from "../userContext";
 
-const CardComponent = ({ data }) => {
+const CardComponent = ({ data, fetchData }) => {
   console.log("CardComponent ", data);
   const [likeColor, setLikeColor] = useState("#f6f6f6");
   const [disLikeColor, setDislikeColor] = useState("#f6f6f6");
 
-  const likeButton = () => {
+  const { user } = useUser();
+
+  const likeButton = async () => {
     setLikeColor((prevColor) =>
       prevColor === "#f6f6f6" ? "black" : "#f6f6f6"
     );
     setDislikeColor("#f6f6f6");
 
+    await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
+      articleId: data._id,
+      userId: user._id,
+      voteStatus: "upvoted",
+    });
+
+    await fetchData();
+
     console.log("buttons pressed");
   };
 
-  const dislikeButton = () => {
+  const dislikeButton = async () => {
     setDislikeColor((prevColor) =>
       prevColor === "#f6f6f6" ? "black" : "#f6f6f6"
     );
     setLikeColor("#f6f6f6");
+
+    await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
+      articleId: data._id,
+      userId: user._id,
+      voteStatus: "downvoted",
+    });
+
+    await fetchData();
     console.log("buttons pressed");
   };
 

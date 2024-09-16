@@ -6,10 +6,20 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import { Toaster } from "react-hot-toast";
 import { UserProvider, useUser } from "./userContext";
+import { useEffect } from "react";
+import axios from "axios";
 
 // Create a component to access user from context
 const AppContent = () => {
-  const { user } = useUser();
+  const { user, logout, login } = useUser();
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_SERVER_URL}api/v1/auth/profile`, {
+        withCredentials: true,
+      })
+      .then(({ data }) => login(data?.user))
+      .catch(() => logout());
+  }, []);
 
   return (
     <Router>
