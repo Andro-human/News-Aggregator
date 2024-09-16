@@ -1,38 +1,48 @@
-import { mongoose } from "mongoose";
+import { mongoose } from 'mongoose';
 
 const articleSchema = new mongoose.Schema(
   {
+    source: {
+      id: { type: String },
+      name: { type: String },
+    },
     author: {
-        type: String,
+      type: String,
     },
     title: {
-        type: String,
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
+      type: String,
     },
     url: {
-        type: String,
+      type: String,
     },
     urlToImage: {
-        type: String,
+      type: String,
     },
     publishedAt: {
-        type: Date,
+      type: Date,
     },
     content: {
-        type: String,
+      type: String,
     },
     upvote: {
-        type: number,
-        required: true 
+      type: Number,
+      required: true,
     },
     downvote: {
-        type: number,
-        required: true
-    }
+      type: Number,
+      required: true,
+    },
+    totalVotes: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("article", articleSchema);
+const articleModel = mongoose.model('articles', articleSchema);
+export default articleModel;

@@ -1,10 +1,28 @@
 import { Box } from "@mui/material";
-import data from "../assets/data.json";
 import CardComponent from "../components/CardComponent.jsx";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Articles = () => {
-  const articles = Array.from({ length: 10 });
-  
+  const [articles, setArticles] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const api = `${import.meta.env.VITE_SERVER_URL}api/v1/articles`;
+      const response = await axios.get(api);
+      setArticles(response.data.data);
+      console.log("response", response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // const articles = Array.from({ length: 10 });
+
   return (
     <Box
       sx={{
@@ -14,11 +32,11 @@ const Articles = () => {
         alignItems: "center",
         justifyContent: "center",
         padding: "2rem",
-        gap: "2rem"
+        gap: "2rem",
       }}
     >
-      {articles.map((_, index) => (
-        <CardComponent key={index} data={data} />
+      {articles.map((item, index) => (
+        <CardComponent key={index} data={item} />
       ))}
     </Box>
   );

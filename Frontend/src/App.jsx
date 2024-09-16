@@ -5,13 +5,15 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import { Toaster } from "react-hot-toast";
+import { UserProvider, useUser } from "./userContext";
 
-function App() {
-  const user = true;
+// Create a component to access user from context
+const AppContent = () => {
+  const { user } = useUser();
+
   return (
-    <>
-      <Router>
-        <Routes>
+    <Router>
+      <Routes>
         <Route
           path="/"
           element={
@@ -22,7 +24,6 @@ function App() {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/login"
           element={
@@ -31,11 +32,17 @@ function App() {
             </PrivateRoute>
           }
         />
-         
-         </Routes>
-         <Toaster postition="bottom-center" />
-      </Router>
-    </>
+      </Routes>
+      <Toaster position="bottom-center" />
+    </Router>
+  );
+};
+
+function App() {
+  return (
+    <UserProvider>
+      <AppContent />
+    </UserProvider>
   );
 }
 

@@ -1,5 +1,6 @@
-import { Box, Button, Link, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
+import { useUser } from "../userContext";
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -18,7 +19,9 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-     console.log("User has logged out.");
+     const {logout} = useUser();
+     logout();
+     console.log("User has logged out.")
   }
   return (
     <Box

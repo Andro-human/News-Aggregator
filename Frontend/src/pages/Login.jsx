@@ -1,23 +1,18 @@
 // import React, { useState } from "react";
-import {
-  Button,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Container, Paper, TextField, Typography } from "@mui/material";
 import backgroundImage from "../assets/loginBackground.jpg";
 import { useState } from "react";
 import axios from "axios";
 // import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
+import { useUser } from "../userContext";
 // import { setLoading, userExists } from "../redux/reducers/auth";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const { login } = useUser();
   // const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
@@ -25,13 +20,19 @@ const Login = () => {
     //   dispatch(setLoading(true));
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_SERVER}api/v1/auth/login`,
+        `${import.meta.env.VITE_SERVER_URL}api/v1/auth/login`,
         {
           username: username,
           password: password,
+        },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" }, 
         }
       );
+      console.log(data);
       // dispatch(userExists(data?.user));
+      login(data?.user);
       setTimeout(() => {
         toast.success(data?.message);
       }, 500);
@@ -52,11 +53,15 @@ const Login = () => {
     //   dispatch(setLoading(true));
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_SERVER}api/v1/auth/new`,
-        { username: username, password: password }
+        `${import.meta.env.VITE_SERVER_URL}api/v1/auth/register`,
+        { username: username, password: password }, {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
       );
 
-    //   dispatch(userExists(data?.user));
+      //   dispatch(userExists(data?.user));
+      login(data?.data?.existingUser);
       setTimeout(() => {
         toast.success(data?.message);
       }, 500);
@@ -67,7 +72,7 @@ const Login = () => {
         );
       }, 500);
     } finally {
-    //   dispatch(setLoading(false));
+      //   dispatch(setLoading(false));
     }
   };
 
