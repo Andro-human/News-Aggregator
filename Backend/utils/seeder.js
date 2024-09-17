@@ -21,7 +21,7 @@ const seedDb = async (category) => {
       totalVotes: 0,
     }));
 
-    // console.log("seedDb", { category, first: updatedArticles[0] });
+    console.log("seedDb", { category, first: updatedArticles[0] });
 
     // Add artices to database
     await articleModel.insertMany(updatedArticles);
