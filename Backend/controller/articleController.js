@@ -33,12 +33,12 @@ const updateVotesController = async (req, res) => {
   try {
     const { userId, articleId, voteStatus } = req.body;
 
-    // console.log("body =", { userId, articleId, voteStatus });
+    console.log("body =", { userId, articleId, voteStatus });
 
     const article = await articleModel.findById(articleId);
     const voteInfo = await voteInfoModel.findOne({ articleId, userId });
 
-    // console.log("voteinfo =", { voteInfo, article });
+    console.log("voteinfo =", { voteInfo, article });
 
     if (voteInfo) {
       let newVote;
