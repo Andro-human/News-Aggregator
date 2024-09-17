@@ -18,7 +18,7 @@ const CardComponent = ({ data, fetchData }) => {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}api/v1/articles/vote-status`,
         {
-          articleId: data._id,
+          articleId: data?._id,
           userId: user._id,
         }
       );
@@ -47,11 +47,14 @@ const CardComponent = ({ data, fetchData }) => {
     setDislikeColor("#f6f6f6");
 
     try {
-      await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
-        articleId: data._id,
-        userId: user._id,
-        voteStatus: lastColor === "#f6f6f6" ? "upvoted" : "novote",
-      });
+      await axios.put(
+        `${import.meta.env.VITE_SERVER_URL}api/v1/articles/update`,
+        {
+          articleId: data._id,
+          userId: user._id,
+          voteStatus: lastColor === "#f6f6f6" ? "upvoted" : "novote",
+        }
+      );
 
       await fetchData();
     } catch (error) {
@@ -67,11 +70,14 @@ const CardComponent = ({ data, fetchData }) => {
     setLikeColor("#f6f6f6");
 
     try {
-      await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
-        articleId: data._id,
-        userId: user._id,
-        voteStatus: lastColor === "#f6f6f6" ? "downvoted" : "novote",
-      });
+      await axios.put(
+        `${import.meta.env.VITE_SERVER_URL}api/v1/articles/update`,
+        {
+          articleId: data._id,
+          userId: user._id,
+          voteStatus: lastColor === "#f6f6f6" ? "downvoted" : "novote",
+        }
+      );
 
       await fetchData();
     } catch (error) {

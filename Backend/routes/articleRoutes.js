@@ -12,7 +12,7 @@ router.get("/", getArticlesController);
 
 router.post("/new", getNewArticlesController);
 
-router.put("/", updateVotesController);
+router.put("/update", updateVotesController);
 
 router.post("/vote-status", getVotedStatus);
 

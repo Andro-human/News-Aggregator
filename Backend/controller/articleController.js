@@ -12,7 +12,9 @@ const getNewArticlesController = async (req, res) => {
 
 const getArticlesController = async (req, res) => {
   try {
-    const articles = await articleModel.find({}).sort({ totalVotes: -1 });
+    const articles = await articleModel.find(
+      {}
+    ); /* .sort({ totalVotes: -1 }) */
     return res.status(200).send({
       status: true,
       message: "Articles fetched successfully!",
@@ -89,7 +91,7 @@ const updateVotesController = async (req, res) => {
     return res.status(500).send({
       status: false,
       message: "Error updating votes!",
-      error,
+      error: error.message,
     });
   }
 };
