@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Card, Typography } from "@mui/material";
 import Like from "../assets/Like.jsx";
 import Dislike from "../assets/Dislike.jsx";
@@ -7,46 +7,81 @@ import axios from "axios";
 import { useUser } from "../userContext";
 
 const CardComponent = ({ data, fetchData }) => {
-  console.log("CardComponent ", data);
+  // console.log("CardComponent ", data);
   const [likeColor, setLikeColor] = useState("#f6f6f6");
   const [disLikeColor, setDislikeColor] = useState("#f6f6f6");
 
   const { user } = useUser();
 
+  const fetchInitalColor = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}api/v1/articles/vote-status`,
+        {
+          articleId: data._id,
+          userId: user._id,
+        }
+      );
+
+      const status = response.data.data.status;
+
+      if (status === "upvoted") {
+        setLikeColor("black");
+      }
+
+      if (status === "downvoted") {
+        setDislikeColor("black");
+      }
+
+      // console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const likeButton = async () => {
+    const lastColor = likeColor;
     setLikeColor((prevColor) =>
       prevColor === "#f6f6f6" ? "black" : "#f6f6f6"
     );
     setDislikeColor("#f6f6f6");
 
-    await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
-      articleId: data._id,
-      userId: user._id,
-      voteStatus: "upvoted",
-    });
+    try {
+      await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
+        articleId: data._id,
+        userId: user._id,
+        voteStatus: lastColor === "#f6f6f6" ? "upvoted" : "novote",
+      });
 
-    await fetchData();
-
-    console.log("buttons pressed");
+      await fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const dislikeButton = async () => {
+    const lastColor = disLikeColor;
     setDislikeColor((prevColor) =>
       prevColor === "#f6f6f6" ? "black" : "#f6f6f6"
     );
     setLikeColor("#f6f6f6");
 
-    await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
-      articleId: data._id,
-      userId: user._id,
-      voteStatus: "downvoted",
-    });
+    try {
+      await axios.put(`${import.meta.env.VITE_SERVER_URL}api/v1/articles`, {
+        articleId: data._id,
+        userId: user._id,
+        voteStatus: lastColor === "#f6f6f6" ? "downvoted" : "novote",
+      });
 
-    await fetchData();
-    console.log("buttons pressed");
+      await fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleLikeButton = () => {};
+  useEffect(() => {
+    fetchInitalColor();
+  }, []);
 
   return (
     <Card

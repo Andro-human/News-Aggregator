@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { UserProvider, useUser } from "./userContext";
 import { useEffect } from "react";
 import axios from "axios";
+import { ArticleProvider } from "../articleContext";
 
 // Create a component to access user from context
 const AppContent = () => {
@@ -51,7 +52,9 @@ const AppContent = () => {
 function App() {
   return (
     <UserProvider>
-      <AppContent />
+      <ArticleProvider>
+        <AppContent />
+      </ArticleProvider>
     </UserProvider>
   );
 }

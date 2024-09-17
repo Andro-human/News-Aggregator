@@ -48,7 +48,7 @@ const loginController = async (req, res) => {
 
     sendToken(res, existingUser, 201, `Welcome back, ${existingUser.username}`);
   } catch (error) {
-    console.log("error in register API", error);
+    console.log("error in login API", error);
 
     return res.status(500).send({
       status: false,

@@ -1,17 +1,18 @@
 import { Box } from "@mui/material";
 import CardComponent from "../components/CardComponent.jsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
+import { useArticle } from "../../articleContext.jsx";
 
 const Articles = () => {
-  const [articles, setArticles] = useState([]);
+  const { articles, setArticles } = useArticle();
 
   const fetchData = async () => {
     try {
       const api = `${import.meta.env.VITE_SERVER_URL}api/v1/articles`;
       const response = await axios.get(api);
+      // console.log("response", response.data);
       setArticles(response.data.data);
-      console.log("response", response);
     } catch (error) {
       console.error(error);
     }

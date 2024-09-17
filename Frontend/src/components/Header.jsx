@@ -1,9 +1,14 @@
 import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
 import { useUser } from "../userContext";
+import axios from "axios";
+import { useArticle } from "../../articleContext";
+
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const { setArticles } = useArticle();
   const open = Boolean(anchorEl);
+  const { logout } = useUser();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -13,16 +18,33 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const handleMenuItemClick = (option) => {
-    console.log("Selected Option:", option);
+  const fetchData = async (option) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}api/v1/articles/new`,
+        {
+          category: option,
+        }
+      );
+      // console.log("response", response.data);
+      setArticles(response.data.data);
+      // console.log("response", response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleMenuItemClick = async (option) => {
+    // console.log("Selected Option:", option);
+    await fetchData(option);
     handleClose();
   };
 
   const handleLogout = () => {
-     const {logout} = useUser();
-     logout();
-     console.log("User has logged out.")
-  }
+    // console.log("User has logged out.");
+
+    logout();
+  };
   return (
     <Box
       sx={{
@@ -63,7 +85,7 @@ const Header = () => {
             xs: "0",
             sm: "1rem",
           },
-          display: "flex"
+          display: "flex",
           // gap: "1rem"
         }}
       >
@@ -89,19 +111,19 @@ const Header = () => {
             Business
           </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("entertainment")}>
-          Entertainment
+            Entertainment
           </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("health")}>
-          Health
+            Health
           </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("science")}>
-          Science
+            Science
           </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("technology")}>
-          Technology
+            Technology
           </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("sports")}>
-          Sports
+            Sports
           </MenuItem>
         </Menu>
         <Box
@@ -114,11 +136,11 @@ const Header = () => {
               xs: "0.9rem",
               sm: "1.2rem",
             },
-            color: "white"
+            color: "white",
           }}
         >
           Logout
-          </Box>
+        </Box>
       </Box>
     </Box>
   );

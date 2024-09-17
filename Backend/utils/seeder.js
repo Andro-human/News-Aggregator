@@ -1,14 +1,15 @@
-import NewsAPI from 'newsapi';
-import config from '../config/config.js';
-import articleModel from '../model/articleModel.js';
+import NewsAPI from "newsapi";
+import config from "../config/config.js";
+import articleModel from "../model/articleModel.js";
 
-const seedDb = async () => {
+const seedDb = async (category) => {
   try {
     await articleModel.deleteMany({});
 
     const newsapi = new NewsAPI(config.newsApiKey);
     const response = await newsapi.v2.topHeadlines({
-      language: 'en',
+      language: "en",
+      category: category,
       pageSize: 10,
     });
 
@@ -20,11 +21,13 @@ const seedDb = async () => {
       totalVotes: 0,
     }));
 
+    // console.log("seedDb", { category, first: updatedArticles[0] });
+
     // Add artices to database
     await articleModel.insertMany(updatedArticles);
-    console.log('Articles database seeded!');
+    console.log("Articles database seeded!");
   } catch (error) {
-    console.error('Error in seeding database', error);
+    console.error("Error in seeding database", error);
   }
 };
 

@@ -30,7 +30,7 @@ const Login = () => {
           headers: { "Content-Type": "application/json" }, 
         }
       );
-      console.log(data);
+      // console.log(data);
       // dispatch(userExists(data?.user));
       login(data?.user);
       setTimeout(() => {
@@ -61,7 +61,7 @@ const Login = () => {
       );
 
       //   dispatch(userExists(data?.user));
-      login(data?.data?.existingUser);
+      login(data?.user);
       setTimeout(() => {
         toast.success(data?.message);
       }, 500);

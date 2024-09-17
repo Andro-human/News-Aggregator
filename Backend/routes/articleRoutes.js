@@ -1,10 +1,19 @@
-import express from 'express';
-import { getArticlesController, updateVotesController } from '../controller/articleController.js';
+import express from "express";
+import {
+  getArticlesController,
+  getNewArticlesController,
+  getVotedStatus,
+  updateVotesController,
+} from "../controller/articleController.js";
 
 const router = express.Router();
 
-router.get('/', getArticlesController);
+router.get("/", getArticlesController);
 
-router.put('/', updateVotesController);
+router.post("/new", getNewArticlesController);
+
+router.put("/", updateVotesController);
+
+router.post("/vote-status", getVotedStatus);
 
 export default router;
