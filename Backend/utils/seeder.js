@@ -10,7 +10,7 @@ const seedDb = async (category) => {
     const response = await newsapi.v2.topHeadlines({
       language: "en",
       category: category,
-      pageSize: 10,
+      pageSize: 6,
     });
 
     const fetchedArticles = response.articles;
